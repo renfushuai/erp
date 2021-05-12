@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="net.rfs.smartadmin.module.business.erp.dao.CompanyDao">
+<mapper namespace="net.rfs.smartadmin.module.business.erp.dao.HospitalDao">
 
-    <resultMap id="CompanyVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.CompanyVO"></resultMap>
-    <resultMap id="CompanyExcelVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.CompanyExcelVO"></resultMap>
+    <resultMap id="HospitalVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.HospitalVO"></resultMap>
+    <resultMap id="HospitalExcelVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.HospitalExcelVO"></resultMap>
 
 
-    <select id="queryByPage" resultMap="CompanyVO">
+    <select id="queryByPage" resultMap="HospitalVO">
         select
-        id,
-        name,
-        create_time,
-        update_time,
-        status
-        from erp_company
+          id,
+          name,
+          area_code,
+          status,
+          update_time,
+          create_time
+        from erp_hospital
         <where>
             <if test="queryDTO.id != null">
                 AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.areaCode != null and queryDTO.areaCode != ''">
+                AND INSTR(area_code,#{queryDTO.areaCode})
             </if>
             <if test="queryDTO.name != null and queryDTO.name != ''">
                 AND INSTR(name,#{queryDTO.name})
@@ -38,17 +42,21 @@
         </where>
     </select>
 
-    <select id="queryAllExportData" resultMap="CompanyExcelVO">
+    <select id="queryAllExportData" resultMap="HospitalExcelVO">
         select
-        id,
-        name,
-        create_time,
-        update_time,
-        status
-        from erp_company
+           id,
+           name,
+           area_code,
+           status,
+           update_time,
+           create_time
+        from erp_hospital
         <where>
             <if test="queryDTO.id != null">
                 AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.areaCode != null and queryDTO.areaCode != ''">
+                AND INSTR(area_code,#{queryDTO.areaCode})
             </if>
             <if test="queryDTO.name != null and queryDTO.name != ''">
                 AND INSTR(name,#{queryDTO.name})
@@ -70,14 +78,15 @@
         </where>
     </select>
 
-    <select id="queryBatchExportData" resultMap="CompanyExcelVO">
+    <select id="queryBatchExportData" resultMap="HospitalExcelVO">
         select
-        id,
-        name,
-        create_time,
-        update_time,
-        status
-        from erp_company
+         id,
+         name,
+         area_code,
+         status,
+         update_time,
+         create_time
+        from erp_hospital
         where id in
         <foreach collection="idList" open="(" close=")" separator="," item="item">
             #{item}
@@ -85,13 +94,11 @@
     </select>
 
     <delete id="deleteById">
-        delete
-        from erp_company
-        where id = #{id}
+        delete from erp_hospital where id = #{id}
     </delete>
 
     <delete id="deleteByIdList">
-        delete from erp_company where id in
+        delete from erp_hospital where id in
         <foreach collection="idList" open="(" close=")" separator="," item="item">
             #{item}
         </foreach>

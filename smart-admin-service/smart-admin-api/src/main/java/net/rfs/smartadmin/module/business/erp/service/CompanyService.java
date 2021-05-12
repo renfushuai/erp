@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,6 +62,8 @@ public class CompanyService {
      */
     public ResponseDTO<String> add(CompanyAddDTO addDTO) {
         CompanyEntity entity = SmartBeanUtil.copy(addDTO, CompanyEntity.class);
+        entity.setCreateTime(new Date());
+        entity.setUpdateTime(new Date());
         companyDao.insert(entity);
         return ResponseDTO.succ();
     }
@@ -73,6 +76,7 @@ public class CompanyService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> update(CompanyUpdateDTO updateDTO) {
         CompanyEntity entity = SmartBeanUtil.copy(updateDTO, CompanyEntity.class);
+        entity.setUpdateTime(new Date());
         companyDao.updateById(entity);
         return ResponseDTO.succ();
     }

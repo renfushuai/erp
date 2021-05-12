@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.rfs.smartadmin.module.business.erp.dao.SalesOrderDao">
+
+    <resultMap id="SalesOrderVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderVO"></resultMap>
+    <resultMap id="SalesOrderExcelVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="SalesOrderVO">
+        select
+          id,
+          code,
+          actually_amount,
+          order_amount,
+          hospital_name,
+          hospital_id,
+          order_type,
+          order_type_name,
+          manager,
+          channel,
+          channel_name,
+          area_code,
+          area_name,
+          create_time,
+          memo,
+          version
+        from erp_sales_order
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.manager != null and queryDTO.manager != ''">
+                AND INSTR(manager,#{queryDTO.manager})
+            </if>
+            <if test="queryDTO.hospitalName != null and queryDTO.hospitalName != ''">
+                AND INSTR(hospital_name,#{queryDTO.hospitalName})
+            </if>
+            <if test="queryDTO.code != null and queryDTO.code != ''">
+                AND INSTR(code,#{queryDTO.code})
+            </if>
+            <if test="queryDTO.createTime != null">
+                AND create_time = #{queryDTO.createTime}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="SalesOrderExcelVO">
+        select
+           id,
+           code,
+           actually_amount,
+           order_amount,
+           hospital_name,
+           hospital_id,
+           order_type,
+           order_type_name,
+           manager,
+           channel,
+           channel_name,
+           area_code,
+           area_name,
+           create_time,
+           memo,
+           version
+        from erp_sales_order
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.manager != null and queryDTO.manager != ''">
+                AND INSTR(manager,#{queryDTO.manager})
+            </if>
+            <if test="queryDTO.hospitalName != null and queryDTO.hospitalName != ''">
+                AND INSTR(hospital_name,#{queryDTO.hospitalName})
+            </if>
+            <if test="queryDTO.code != null and queryDTO.code != ''">
+                AND INSTR(code,#{queryDTO.code})
+            </if>
+            <if test="queryDTO.createTime != null">
+                AND create_time = #{queryDTO.createTime}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="SalesOrderExcelVO">
+        select
+         id,
+         code,
+         actually_amount,
+         order_amount,
+         hospital_name,
+         hospital_id,
+         order_type,
+         order_type_name,
+         manager,
+         channel,
+         channel_name,
+         area_code,
+         area_name,
+         create_time,
+         memo,
+         version
+        from erp_sales_order
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from erp_sales_order where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from erp_sales_order where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -6,7 +6,10 @@ import { emailSetting } from './email';
 import { keepAlive } from './keep-alive';
 import { notice } from './notice';
 import { threeRouter } from './three-router';
-
+import { company } from './company';
+import { hospital } from './hospital';
+import { salesOrder } from './sales-order';
+import {salesOrderInfo} from './sales-order-info'
 // 业务
 export const business = [
   {
@@ -23,7 +26,11 @@ export const business = [
       ...emailSetting,
       ...keepAlive,
       ...notice,
-      ...threeRouter
+      ...threeRouter,
+      ...salesOrder,
+      ...salesOrderInfo,
+      ...hospital,
+      ...company
     ]
   }
 ];
