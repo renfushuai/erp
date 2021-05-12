@@ -16,6 +16,7 @@ import net.rfs.smartadmin.module.business.erp.service.ImportSalesOrderListener;
 import net.rfs.smartadmin.module.business.erp.service.SalesOrderService;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
+import net.rfs.smartadmin.util.SmartEasyPoiExcelUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import io.swagger.annotations.Api;
@@ -94,6 +95,17 @@ public class SalesOrderController extends BaseController {
         ExportParams ex = new ExportParams("", "Sheet1");
         Workbook workbook = ExcelExportUtil.exportExcel(ex, SalesOrderExcelVO.class, salesOrderList);
         downloadExcel("", workbook, response);
+    }
+    @ApiOperation("上传销售单")
+    @PostMapping(value = "/salesOrder/upload")
+    public ResponseDTO<String> upload(@RequestBody MultipartFile file,HttpServletRequest request){
+        String companyId = request.getParameter("companyId");
+        if (StringUtils.isBlank(companyId)){
+            return  ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM,"companyId不能为空");
+        }
+        List<ImportSalesOrderExcelDto> list = SmartEasyPoiExcelUtil.importExcel(file, 0, 1, ImportSalesOrderExcelDto.class);
+        salesOrderService.uploadSalesOrder(list,1,Integer.valueOf(companyId),"外科");
+        return ResponseDTO.succData("ok");
     }
    /* @ApiOperation(value = "上传销售单")
     @PostMapping(value = "/salesOrder/upload")

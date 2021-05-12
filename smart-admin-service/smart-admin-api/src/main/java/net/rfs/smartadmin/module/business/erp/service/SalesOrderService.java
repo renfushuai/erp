@@ -6,10 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.rfs.smartadmin.common.domain.PageResultDTO;
 import net.rfs.smartadmin.common.domain.ResponseDTO;
 import net.rfs.smartadmin.module.business.erp.dao.SalesOrderDao;
+import net.rfs.smartadmin.module.business.erp.dao.SalesOrderInfoDao;
+import net.rfs.smartadmin.module.business.erp.domain.dto.ImportSalesOrderExcelDto;
 import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderAddDTO;
 import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderQueryDTO;
 import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderUpdateDTO;
 import net.rfs.smartadmin.module.business.erp.domain.entity.SalesOrderEntity;
+import net.rfs.smartadmin.module.business.erp.domain.entity.SalesOrderInfoEntity;
 import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderExcelVO;
 import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderVO;
 import net.rfs.smartadmin.util.SmartBeanUtil;
@@ -35,7 +38,8 @@ public class SalesOrderService {
 
     @Autowired
     private SalesOrderDao salesOrderDao;
-
+    @Autowired
+private SalesOrderInfoDao salesOrderInfoDao;
     /**
      * 根据id查询
      */
@@ -117,4 +121,41 @@ public class SalesOrderService {
     public List<SalesOrderExcelVO> queryBatchExportData(List<Long> idList) {
         return salesOrderDao.queryBatchExportData(idList);
     }
+    public void uploadSalesOrder(List<ImportSalesOrderExcelDto> dataList, Integer orderType, Integer sourceId, String orderTypeName) {
+        dataList.forEach(data -> {
+            SalesOrderEntity salesOrder = getByOrderCode(data.getOrderCode());
+            SalesOrderInfoEntity salesOrderInfo = new SalesOrderInfoEntity();
+            salesOrderInfo.setOrderCode(data.getOrderCode());
+            salesOrderInfo.setProductNumber(data.getProductNumber());
+            salesOrderInfo.setProductName(data.getProductName());
+            salesOrderInfo.setSalesQuantity(data.getSalesQuantity());
+            salesOrderInfo.setSpecifications(data.getSpecifications());
+            salesOrderInfo.setSalesPrice(data.getSalesPrice());
+            salesOrderInfo.setStandardPrice(data.getStandardPrice());
+            if (salesOrder == null) {
+                salesOrder = new SalesOrderEntity();
+                salesOrder.setCode(data.getOrderCode());
+                salesOrder.setActuallyAmount(salesOrderInfo.getSalesPrice());
+                salesOrder.setOrderAmount(salesOrderInfo.getSalesPrice());
+                salesOrder.setHospitalName(data.getHospitalName());
+                salesOrder.setOrderType(orderType);
+                salesOrder.setOrderTypeName(orderTypeName);
+                salesOrder.setManager(data.getManager());
+                if (data.getChannelName().contains("医院")) {
+                    salesOrder.setChannel(1);
+                } else {
+                    salesOrder.setChannel(2);
+                }
+                salesOrder.setChannelName(data.getChannelName());
+                salesOrder.setAreaCode(data.getAreaCode());
+                salesOrder.setMemo(data.getMemo());
+                salesOrder.setVersion(1);
+                salesOrder.setCreateTime(data.getCreateTime());
+                salesOrder.setOrderSourceId(sourceId);
+                salesOrderDao.insert(salesOrder);
+            }
+            salesOrderInfoDao.insert(salesOrderInfo);
+        });
+    }
+
 }

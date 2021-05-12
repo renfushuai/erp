@@ -23,6 +23,8 @@
           area_name,
           create_time,
           memo,
+        order_source_id,
+        order_source_name,
           version
         from erp_sales_order
         <where>
@@ -75,6 +77,8 @@
            area_name,
            create_time,
            memo,
+        order_source_id,
+        order_source_name,
            version
         from erp_sales_order
         <where>
@@ -127,6 +131,8 @@
          area_name,
          create_time,
          memo,
+        order_source_id,
+        order_source_name,
          version
         from erp_sales_order
         where id in

@@ -104,7 +104,9 @@
     <Card class="warp-card">
       <!-------操作按钮行 begin------->
       <Row class="marginBottom10">
-        <Upload action="//jsonplaceholder.typicode.com/posts/" style=" display: inline-block;margin-bottom: 0;padding: 0 7px;">
+        <Upload :action="uploadUrl" :headers='{"x-access-token": tokenData}' 
+        :data='{"companyId":1}'
+        style=" display: inline-block;margin-bottom: 0;padding: 0 7px;">
           <Button type="success" size="small" icon="ios-cloud-upload-outline"
             >上传数据</Button
           >
@@ -231,6 +233,8 @@ import { dateTimeRangeConvert } from "@/lib/util";
 import { PAGE_SIZE_OPTIONS } from "@/constants/table-page";
 import { salesOrderApi } from "@/api/sales-order";
 import SalesOrderListForm from "./components/sales-order-list-form";
+import config from '@/config';
+import cookie from '@/lib/cookie';
 const PAGE_SIZE_INIT = 20;
 export default {
   name: "SalesOrderList",
@@ -240,6 +244,8 @@ export default {
   props: {},
   data() {
     return {
+      uploadUrl:config.baseUrl.apiUrl+'/salesOrder/upload',
+      tokenData:cookie.getToken(),
       /* -------------------------添加、更新表单 ------------------------- */
       saveModal: {
         show: false,
@@ -305,75 +311,40 @@ export default {
             sortable: "custom",
           },
           {
-            title: "订单号",
+            title: "结算单",
             key: "code",
             tableColumn: "erp_sales_order.code",
             sortable: "custom",
           },
           {
-            title: "实付金额",
+            title: "结算金额",
             key: "actuallyAmount",
             tableColumn: "erp_sales_order.actually_amount",
             sortable: "custom",
           },
           {
-            title: "订单金额",
-            key: "orderAmount",
-            tableColumn: "erp_sales_order.order_amount",
-            sortable: "custom",
-          },
-          {
             title: "医院",
             key: "hospitalName",
-            tableColumn: "erp_sales_order.hospital_name",
-            sortable: "custom",
-          },
-          {
-            title: "医院id",
-            key: "hospitalId",
-            tableColumn: "erp_sales_order.hospital_id",
-            sortable: "custom",
-          },
-          {
-            title: "1=外科2=内科3=器械",
-            key: "orderType",
-            tableColumn: "erp_sales_order.order_type",
-            sortable: "custom",
+            width:200
           },
           {
             title: "销售单类型",
             key: "orderTypeName",
-            tableColumn: "erp_sales_order.order_type_name",
-            sortable: "custom",
           },
           {
             title: "经办人",
             key: "manager",
-            tableColumn: "erp_sales_order.manager",
-            sortable: "custom",
-          },
-          {
-            title: "渠道1=医院 2=代理商",
-            key: "channel",
-            tableColumn: "erp_sales_order.channel",
-            sortable: "custom",
           },
           {
             title: "渠道名称",
             key: "channelName",
             tableColumn: "erp_sales_order.channel_name",
-            sortable: "custom",
+            
           },
           {
             title: "地区编号",
             key: "areaCode",
             tableColumn: "erp_sales_order.area_code",
-            sortable: "custom",
-          },
-          {
-            title: "地区名称",
-            key: "areaName",
-            tableColumn: "erp_sales_order.area_name",
             sortable: "custom",
           },
           {
@@ -386,12 +357,6 @@ export default {
             title: "备注",
             key: "memo",
             tableColumn: "erp_sales_order.memo",
-            sortable: "custom",
-          },
-          {
-            title: "版本",
-            key: "version",
-            tableColumn: "erp_sales_order.version",
             sortable: "custom",
           },
           {
@@ -573,7 +538,7 @@ export default {
       }
     },
     /*-------------------------导入导出 end------------------------- */
-
+    uploadSalesOrder(){salesOrderApi.uploadSalesOrder({"sourceId":1})},
     /*-------------------------添加，修改 表单 begin------------------------- */
     //显示添加表单
     showAddSalesOrderForm() {
