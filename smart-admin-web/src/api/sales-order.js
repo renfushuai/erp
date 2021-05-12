@@ -25,4 +25,7 @@ export const salesOrderApi = {
     batchExport: (idList) => {
         return postDownloadAxios('/salesOrder/export/batch', idList);
     },
+    uploadSalesOrder: (data) => {
+        return postAxios('/salesOrder/update',data);
+    },
 };
