@@ -64,5 +64,6 @@ public class SalesOrderAddDTO {
     @ApiModelProperty("版本")
     private Integer version;
 
-
+    private Integer order_source_id;
+    private String order_source_name;
 }

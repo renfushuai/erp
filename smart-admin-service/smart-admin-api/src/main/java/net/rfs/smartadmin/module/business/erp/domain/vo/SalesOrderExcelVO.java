@@ -65,6 +65,8 @@ public class SalesOrderExcelVO {
     @Excel(name = "版本")
     private Integer version;
 
-
-
+    @Excel(name = "订单来源")
+    private Integer order_source_id;
+    @Excel(name = "订单来源")
+    private String order_source_name;
 }

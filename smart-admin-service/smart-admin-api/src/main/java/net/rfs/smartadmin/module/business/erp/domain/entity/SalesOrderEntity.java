@@ -90,5 +90,7 @@ public class SalesOrderEntity extends BaseEntity{
      * 版本
      */
     private Integer version;
+    private Integer orderSourceId;
+    private String orderSourceName;
 
 }

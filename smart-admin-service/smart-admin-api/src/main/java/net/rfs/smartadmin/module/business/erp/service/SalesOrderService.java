@@ -1,18 +1,19 @@
 package net.rfs.smartadmin.module.business.erp.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.rfs.smartadmin.common.domain.PageResultDTO;
 import net.rfs.smartadmin.common.domain.ResponseDTO;
 import net.rfs.smartadmin.module.business.erp.dao.SalesOrderDao;
 import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderAddDTO;
-import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderUpdateDTO;
 import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderQueryDTO;
+import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderUpdateDTO;
 import net.rfs.smartadmin.module.business.erp.domain.entity.SalesOrderEntity;
-import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderVO;
 import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderExcelVO;
-import net.rfs.smartadmin.util.SmartPageUtil;
+import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderVO;
 import net.rfs.smartadmin.util.SmartBeanUtil;
+import net.rfs.smartadmin.util.SmartPageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,12 +39,18 @@ public class SalesOrderService {
     /**
      * 根据id查询
      */
-    public SalesOrderEntity getById(Long id){
-        return  salesOrderDao.selectById(id);
+    public SalesOrderEntity getById(Long id) {
+        return salesOrderDao.selectById(id);
+    }
+
+    public SalesOrderEntity getByOrderCode(String orderCode) {
+        return salesOrderDao.selectOne(Wrappers.<SalesOrderEntity>lambdaQuery()
+                .eq(SalesOrderEntity::getCode, orderCode));
     }
 
     /**
      * 分页查询
+     *
      * @author 任富帅
      * @date 2021-05-12 14:59:01
      */
@@ -56,6 +63,7 @@ public class SalesOrderService {
 
     /**
      * 添加
+     *
      * @author 任富帅
      * @date 2021-05-12 14:59:01
      */
@@ -67,6 +75,7 @@ public class SalesOrderService {
 
     /**
      * 编辑
+     *
      * @author 任富帅
      * @date 2021-05-12 14:59:01
      */
@@ -79,6 +88,7 @@ public class SalesOrderService {
 
     /**
      * 删除
+     *
      * @author 任富帅
      * @date 2021-05-12 14:59:01
      */
@@ -90,15 +100,17 @@ public class SalesOrderService {
 
     /**
      * 查询全部导出对象
+     *
      * @author 任富帅
      * @date 2021-05-12 14:59:01
      */
     public List<SalesOrderExcelVO> queryAllExportData(SalesOrderQueryDTO queryDTO) {
-        return salesOrderDao.queryAllExportData( queryDTO);
+        return salesOrderDao.queryAllExportData(queryDTO);
     }
 
     /**
      * 批量查询导出对象
+     *
      * @author 任富帅
      * @date 2021-05-12 14:59:01
      */

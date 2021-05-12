@@ -1,5 +1,6 @@
 package net.rfs.smartadmin.module.business.erp.domain.vo;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -67,6 +68,9 @@ public class SalesOrderVO {
     @ApiModelProperty("版本")
     private Integer version;
 
-
+    @ApiModelProperty(name = "订单来源")
+    private Integer order_source_id;
+    @ApiModelProperty(name = "订单来源")
+    private String order_source_name;
 
 }
