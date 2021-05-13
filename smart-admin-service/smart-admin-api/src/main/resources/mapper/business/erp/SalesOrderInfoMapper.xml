@@ -8,19 +8,36 @@
 
     <select id="queryByPage" resultMap="SalesOrderInfoVO">
         select
-          id,
-          order_code,
-          product_id,
-          product_name,
-          product_number,
-          specifications,
-          sales_quantity,
-          sales_price,
-          standard_price
-        from erp_sales_order_info
+        a.id,
+        a.order_code,
+        a.product_id,
+        a.product_name,
+        a.product_number,
+        a.specifications,
+        a.sales_quantity,
+        a.sales_price,
+        a.standard_price,
+        b.actually_amount,
+        b.order_amount,
+        b.hospital_name,
+        b.hospital_id,
+        b.order_type,
+        b.order_type_name,
+        b.manager,
+        b.channel,
+        b.channel_name,
+        b.area_code,
+        b.area_name,
+        b.create_time,
+        b.memo,
+        b.order_source_id,
+        b.order_source_name,
+        b.version
+        from erp_sales_order_info a
+        left join erp_sales_order b on a.order_code = b.code
         <where>
             <if test="queryDTO.id != null">
-                AND id = #{queryDTO.id}
+                AND a.id = #{queryDTO.id}
             </if>
             <if test="queryDTO.specifications != null and queryDTO.specifications != ''">
                 AND INSTR(specifications,#{queryDTO.specifications})
@@ -33,17 +50,10 @@
             </if>
 
             <if test="queryDTO.createTimeBegin != null ">
-                AND create_time &gt;= #{queryDTO.createTimeBegin}
+                AND b.create_time &gt;= #{queryDTO.createTimeBegin}
             </if>
             <if test="queryDTO.createTimeEnd != null ">
-                AND create_time &lt;= #{queryDTO.createTimeEnd}
-            </if>
-
-            <if test="queryDTO.updateTimeBegin != null ">
-                AND update_time &gt;= #{queryDTO.updateTimeBegin}
-            </if>
-            <if test="queryDTO.updateTimeEnd != null ">
-                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+                AND b.create_time &lt;= #{queryDTO.createTimeEnd}
             </if>
         </where>
     </select>

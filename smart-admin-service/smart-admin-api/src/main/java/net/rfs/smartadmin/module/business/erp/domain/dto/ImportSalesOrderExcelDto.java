@@ -6,6 +6,11 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+* @author: rfs
+* @create: 2021/5/13
+* @description: 结算单导入
+**/
 @Data
 public class ImportSalesOrderExcelDto {
     @Excel(name = "结算单")

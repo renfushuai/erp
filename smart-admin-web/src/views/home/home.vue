@@ -48,13 +48,6 @@
         </HomeCard>
       </i-col>
     </Row>
-
-
-  <Modal
-        v-model="adModal" width="800">
-        <Ad/>
-    </Modal>
-
   </div>
 </template>
 
@@ -69,7 +62,6 @@ import ChartBar from './components/chart-bar';
 import HomeCircle from './components/home-circle';
 import HomeProgress from './components/home-progress';
 import ChartFunnel from './components/chart-funnel';
-import Ad from '@/components/smart-admin-ad';
 
 export default {
   name: 'Home',
@@ -83,13 +75,11 @@ export default {
     HomeCircle,
     ChartGauge,
     ChartBar,
-    HomeProgress,
-    Ad
+    HomeProgress
   },
   props: {},
   data() {
     return {
-      adModal:true,
       infoCardData: [
         {
           title: '新增用户',

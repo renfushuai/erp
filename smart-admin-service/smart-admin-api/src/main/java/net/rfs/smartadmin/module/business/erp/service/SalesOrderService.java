@@ -13,15 +13,18 @@ import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderQueryDTO;
 import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderUpdateDTO;
 import net.rfs.smartadmin.module.business.erp.domain.entity.SalesOrderEntity;
 import net.rfs.smartadmin.module.business.erp.domain.entity.SalesOrderInfoEntity;
+import net.rfs.smartadmin.module.business.erp.domain.vo.CompanyVO;
 import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderExcelVO;
 import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderVO;
 import net.rfs.smartadmin.util.SmartBeanUtil;
 import net.rfs.smartadmin.util.SmartPageUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * [  ]
@@ -39,7 +42,10 @@ public class SalesOrderService {
     @Autowired
     private SalesOrderDao salesOrderDao;
     @Autowired
-private SalesOrderInfoDao salesOrderInfoDao;
+    private SalesOrderInfoDao salesOrderInfoDao;
+    @Autowired
+    private CompanyService companyService;
+
     /**
      * 根据id查询
      */
@@ -121,10 +127,15 @@ private SalesOrderInfoDao salesOrderInfoDao;
     public List<SalesOrderExcelVO> queryBatchExportData(List<Long> idList) {
         return salesOrderDao.queryBatchExportData(idList);
     }
+
     public void uploadSalesOrder(List<ImportSalesOrderExcelDto> dataList, Integer orderType, Integer sourceId, String orderTypeName) {
-        dataList.forEach(data -> {
+        List<CompanyVO> companyList = companyService.getAll().getData();
+        for (ImportSalesOrderExcelDto data : dataList) {
             SalesOrderEntity salesOrder = getByOrderCode(data.getOrderCode());
             SalesOrderInfoEntity salesOrderInfo = new SalesOrderInfoEntity();
+            if (StringUtils.isBlank(data.getOrderCode())){
+                continue;
+            }
             salesOrderInfo.setOrderCode(data.getOrderCode());
             salesOrderInfo.setProductNumber(data.getProductNumber());
             salesOrderInfo.setProductName(data.getProductName());
@@ -141,7 +152,7 @@ private SalesOrderInfoDao salesOrderInfoDao;
                 salesOrder.setOrderType(orderType);
                 salesOrder.setOrderTypeName(orderTypeName);
                 salesOrder.setManager(data.getManager());
-                if (data.getChannelName().contains("医院")) {
+                if (data.getChannelName()!=null&&data.getChannelName().contains("医院")) {
                     salesOrder.setChannel(1);
                 } else {
                     salesOrder.setChannel(2);
@@ -151,11 +162,12 @@ private SalesOrderInfoDao salesOrderInfoDao;
                 salesOrder.setMemo(data.getMemo());
                 salesOrder.setVersion(1);
                 salesOrder.setCreateTime(data.getCreateTime());
+                salesOrder.setOrderSourceName(companyList.stream().filter(m -> m.getId().equals(Long.valueOf(sourceId))).findFirst().get().getName());
                 salesOrder.setOrderSourceId(sourceId);
                 salesOrderDao.insert(salesOrder);
             }
             salesOrderInfoDao.insert(salesOrderInfo);
-        });
+        }
     }
 
 }

@@ -54,7 +54,11 @@ public class CompanyService {
         PageResultDTO<CompanyVO> pageResultDTO = SmartPageUtil.convert2PageResult(voList);
         return ResponseDTO.succData(pageResultDTO);
     }
-
+    public ResponseDTO<List<CompanyVO>> getAll() {
+        List<CompanyEntity> companyEntities = companyDao.selectList(null);
+        List<CompanyVO> companyVOS = SmartBeanUtil.copyList(companyEntities, CompanyVO.class);
+        return ResponseDTO.succData(companyVOS);
+    }
     /**
      * 添加
      * @author 卓大

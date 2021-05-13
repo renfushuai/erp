@@ -6,12 +6,15 @@ import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,24 @@ import java.util.NoSuchElementException;
  */
 
 public class SmartEasyPoiExcelUtil {
+    /**
+     * 得到Workbook对象
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static Workbook getWorkBook(MultipartFile file) throws IOException{
+        //这样写  excel 能兼容03和07
+        InputStream is = file.getInputStream();
+        Workbook hssfWorkbook;
+        try {
+            hssfWorkbook = new HSSFWorkbook(is);
+        } catch (Exception ex) {
+            is =file.getInputStream();
+            hssfWorkbook = new XSSFWorkbook(is);
+        }
+        return hssfWorkbook;
+    }
     public static void exportExcel(List<?> list, String title, String sheetName, Class<?> pojoClass,
                                    String fileName, boolean isCreateHeader, HttpServletResponse response) throws IOException {
         ExportParams exportParams = new ExportParams(title, sheetName);
@@ -78,13 +99,17 @@ public class SmartEasyPoiExcelUtil {
         return list;
     }
 
-    public static <T> List<T> importExcel(MultipartFile file, Integer titleRows, Integer headerRows, Class<T> pojoClass) {
+    public static <T> List<T> importExcel(MultipartFile file,Integer startSheetIndex, Integer titleRows, Integer headerRows, Class<T> pojoClass) {
         if (file == null) {
             return null;
         }
         ImportParams params = new ImportParams();
+        // 表头在第几行
         params.setTitleRows(titleRows);
+        // 共几行表头
         params.setHeadRows(headerRows);
+        //第几个sheet
+        params.setStartSheetIndex(startSheetIndex);
         List<T> list = null;
         try {
             list = ExcelImportUtil.importExcel(file.getInputStream(), pojoClass, params);

@@ -45,7 +45,11 @@ public class CompanyController extends BaseController {
     public ResponseDTO<PageResultDTO<CompanyVO>> queryByPage(@RequestBody CompanyQueryDTO queryDTO) {
         return companyService.queryByPage(queryDTO);
     }
-
+    @ApiOperation(value = "获取所有公司")
+    @GetMapping("/company/getAll")
+    public ResponseDTO<List<CompanyVO>> getAll() {
+        return companyService.getAll();
+    }
     @ApiOperation(value = "添加",notes = "@author 卓大")
     @PostMapping("/company/add")
     public ResponseDTO<String> add(@RequestBody @Validated CompanyAddDTO addTO){

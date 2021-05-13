@@ -9,6 +9,9 @@ export const companyApi = {
     queryCompany: (data) => {
         return postAxios('/company/page/query', data);
     },
+    getAll:()=>{
+        return getAxios("/company/getAll")
+    },
     // 批量删除公司表 @author 任富帅
     batchDeleteCompany: (idList) => {
         return postAxios('/company/deleteByIds', idList);

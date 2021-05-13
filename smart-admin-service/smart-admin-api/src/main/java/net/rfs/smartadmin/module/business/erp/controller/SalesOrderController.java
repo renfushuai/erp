@@ -12,7 +12,6 @@ import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderUpdateDTO;
 import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderQueryDTO;
 import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderVO;
 import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderExcelVO;
-import net.rfs.smartadmin.module.business.erp.service.ImportSalesOrderListener;
 import net.rfs.smartadmin.module.business.erp.service.SalesOrderService;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
@@ -30,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -49,8 +49,6 @@ public class SalesOrderController extends BaseController {
 
     @Autowired
     private SalesOrderService salesOrderService;
-    @Autowired
-    private  ImportSalesOrderListener excelListener;
     @ApiOperation(value = "分页查询",notes = "@author 任富帅")
     @PostMapping("/salesOrder/page/query")
     public ResponseDTO<PageResultDTO<SalesOrderVO>> queryByPage(@RequestBody SalesOrderQueryDTO queryDTO) {
@@ -98,55 +96,17 @@ public class SalesOrderController extends BaseController {
     }
     @ApiOperation("上传销售单")
     @PostMapping(value = "/salesOrder/upload")
-    public ResponseDTO<String> upload(@RequestBody MultipartFile file,HttpServletRequest request){
+    public ResponseDTO<String> upload(@RequestBody MultipartFile file,HttpServletRequest request)throws IOException {
         String companyId = request.getParameter("companyId");
         if (StringUtils.isBlank(companyId)){
             return  ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM,"companyId不能为空");
         }
-        List<ImportSalesOrderExcelDto> list = SmartEasyPoiExcelUtil.importExcel(file, 0, 1, ImportSalesOrderExcelDto.class);
-        salesOrderService.uploadSalesOrder(list,1,Integer.valueOf(companyId),"外科");
-        return ResponseDTO.succData("ok");
-    }
-   /* @ApiOperation(value = "上传销售单")
-    @PostMapping(value = "/salesOrder/upload")
-    public ResponseDTO<String> upload(@RequestBody MultipartFile file, HttpServletRequest request) throws Exception {
-        String companyId = request.getParameter("companyId");
-        if (StringUtils.isBlank(companyId)){
-           return  ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM,"companyId不能为空");
-        }
-        ExcelReader excelReader = null;
-        InputStream in = null;
-        try {
-            in = file.getInputStream();
-            excelReader = EasyExcel.read(in, ImportSalesOrderExcelDto.class, excelListener).build();
-            //获取sheet0对象
-            ReadSheet waikeSheet = EasyExcel.readSheet(0).head(ImportSalesOrderExcelDto.class).build();
-            //读取数据
-            excelReader.read(waikeSheet);
-            excelListener.save(1, companyId,"外科");
-            //清空list数据
-            excelListener.getDataList().clear();
-            //获取sheet1对象
-            ReadSheet nekeiSheet = EasyExcel.readSheet(1).head(ImportSalesOrderExcelDto.class).build();
-            //读取数据
-            excelReader.read(nekeiSheet);
-            excelListener.save(2, companyId,"内科");
-            //清空list数据
-            excelListener.getDataList().clear();
-            //获取sheet1对象
-            ReadSheet qixieSheet = EasyExcel.readSheet(2).build();
-            //读取数据
-            excelReader.read(qixieSheet);
-            excelListener.save(3, companyId,"器械");
-            //清空list数据
-            excelListener.getDataList().clear();
-
-        } finally {
-            in.close();
-            if (excelReader != null) {
-                excelReader.finish();
-            }
+        Workbook hssfWorkbook = SmartEasyPoiExcelUtil.getWorkBook(file);
+        for (int i = 0; i < hssfWorkbook.getNumberOfSheets(); i++) {
+            List<ImportSalesOrderExcelDto> list = SmartEasyPoiExcelUtil.importExcel(file,i,0, 1, ImportSalesOrderExcelDto.class);
+            Integer orderType=i+1;
+            salesOrderService.uploadSalesOrder(list,orderType,Integer.valueOf(companyId),hssfWorkbook.getSheetAt(i).getSheetName());
         }
         return ResponseDTO.succData("ok");
     }
-*/}
+   }
