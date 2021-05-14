@@ -15,6 +15,7 @@ export const hospital = [
                 name: 'HospitalList',
                 meta: {
                     title: '医院列表',
+                    icon: 'icon iconfont iconzujian',
                     privilege: [
                         { title: '查询', name: 'hospital-list-query' },
                         { title: '新增', name: 'hospital-list-add' },

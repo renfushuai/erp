@@ -35,12 +35,9 @@ public class CodeGeneratorServiceTest extends BaseTest {
                 .columnName("kind")
                 .sqlOperate(SqlOperateTypeEnum.LIKE).build();*/
         //搜索字段 kind， 使用 == 搜索
-        CodeGeneratorQueryColumnDTO id = CodeGeneratorQueryColumnDTO.builder()
-                .columnName("id")
-                .sqlOperate(SqlOperateTypeEnum.EQUALS).build();
         //搜索字段 name， 使用like搜索
         CodeGeneratorQueryColumnDTO code = CodeGeneratorQueryColumnDTO.builder()
-                .columnName("order_code")
+                .columnName("product_number")
                 .sqlOperate(SqlOperateTypeEnum.LIKE).build();
         CodeGeneratorQueryColumnDTO areCode = CodeGeneratorQueryColumnDTO.builder()
                 .columnName("product_name")
@@ -49,12 +46,12 @@ public class CodeGeneratorServiceTest extends BaseTest {
         CodeGeneratorQueryColumnDTO manager = CodeGeneratorQueryColumnDTO.builder()
                 .columnName("specifications")
                 .sqlOperate(SqlOperateTypeEnum.LIKE).build();
-        List<CodeGeneratorQueryColumnDTO> queryColumnList = Lists.newArrayList(id,manager,areCode,code);
+        List<CodeGeneratorQueryColumnDTO> queryColumnList = Lists.newArrayList(manager,areCode,code);
 
         CodeGeneratorDTO codeGenerator = CodeGeneratorDTO.builder()
                 .author("任富帅")//class 注释作者
                 .company("rfs")//class注释公司名字
-                .tableName("erp_sales_order_info")//表名
+                .tableName("erp_product")//表名
                 .tablePrefix("erp_")//表名前缀
                 .basePackage("net.rfs.smartadmin")//包名
                 .modulePackage("business.erp")//业务子包名

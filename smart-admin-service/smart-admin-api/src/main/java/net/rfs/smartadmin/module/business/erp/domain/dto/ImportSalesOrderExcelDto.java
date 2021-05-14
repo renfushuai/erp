@@ -27,7 +27,7 @@ public class ImportSalesOrderExcelDto {
     private Integer salesQuantity;
     /** 出货单价 */
     @Excel(name = "出货单价")
-    private Integer standardPrice;
+    private BigDecimal standardPrice;
     /** 出货金额 */
     @Excel(name = "出货金额")
     private BigDecimal salesPrice;

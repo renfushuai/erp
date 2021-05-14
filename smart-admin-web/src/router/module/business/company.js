@@ -16,6 +16,7 @@ export const company = [
                 name: 'CompanyList',
                 meta: {
                     title: '公司表列表',
+                    icon: 'icon iconfont iconzujian',
                     privilege: [
                         { title: '查询', name: 'company-list-query' },
                         { title: '新增', name: 'company-list-add' },

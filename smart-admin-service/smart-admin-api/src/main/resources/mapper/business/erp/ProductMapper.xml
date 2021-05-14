@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.rfs.smartadmin.module.business.erp.dao.ProductDao">
+
+    <resultMap id="ProductVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.ProductVO"></resultMap>
+    <resultMap id="ProductExcelVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.ProductExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ProductVO">
+        select
+          id,
+          product_number,
+          product_name,
+          specifications,
+          stock,
+          standard_price,
+          product_type,
+          status,
+          create_time,
+          update_time
+        from erp_product
+        <where>
+            <if test="queryDTO.specifications != null and queryDTO.specifications != ''">
+                AND INSTR(specifications,#{queryDTO.specifications})
+            </if>
+            <if test="queryDTO.productName != null and queryDTO.productName != ''">
+                AND INSTR(product_name,#{queryDTO.productName})
+            </if>
+            <if test="queryDTO.productNumber != null and queryDTO.productNumber != ''">
+                AND INSTR(product_number,#{queryDTO.productNumber})
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ProductExcelVO">
+        select
+           id,
+           product_number,
+           product_name,
+           specifications,
+           stock,
+           standard_price,
+           product_type,
+           status,
+           create_time,
+           update_time
+        from erp_product
+        <where>
+            <if test="queryDTO.specifications != null and queryDTO.specifications != ''">
+                AND INSTR(specifications,#{queryDTO.specifications})
+            </if>
+            <if test="queryDTO.productName != null and queryDTO.productName != ''">
+                AND INSTR(product_name,#{queryDTO.productName})
+            </if>
+            <if test="queryDTO.productNumber != null and queryDTO.productNumber != ''">
+                AND INSTR(product_number,#{queryDTO.productNumber})
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ProductExcelVO">
+        select
+         id,
+         product_number,
+         product_name,
+         specifications,
+         stock,
+         standard_price,
+         product_type,
+         status,
+         create_time,
+         update_time
+        from erp_product
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from erp_product where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from erp_product where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

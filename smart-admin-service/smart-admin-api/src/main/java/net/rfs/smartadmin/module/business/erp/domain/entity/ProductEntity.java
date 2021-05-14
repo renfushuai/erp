@@ -12,28 +12,13 @@ import lombok.Data;
  * @version 1.0
  * @company rfs
  * @copyright (c)  rfsInc. All rights reserved.
- * @date 2021-05-12 15:00:50
+ * @date 2021-05-14 15:53:42
  * @since JDK1.8
  */
 @Data
-@TableName("erp_sales_order_info")
-public class SalesOrderInfoEntity extends BaseEntity{
+@TableName("erp_product")
+public class ProductEntity extends BaseEntity{
 
-
-    /**
-     * 销售单号
-     */
-    private String orderCode;
-
-    /**
-     * 商品Id
-     */
-    private Long productId;
-
-    /**
-     * 商品名称
-     */
-    private String productName;
 
     /**
      * 货号
@@ -41,23 +26,35 @@ public class SalesOrderInfoEntity extends BaseEntity{
     private String productNumber;
 
     /**
+     * 商品名称
+     */
+    private String productName;
+
+    /**
      * 规格
      */
     private String specifications;
 
     /**
-     * 数量
+     * 库存
      */
-    private Integer salesQuantity;
+    private Integer stock;
 
     /**
-     * 出货金额
-     */
-    private BigDecimal salesPrice;
-
-    /**
-     * 出货单价
+     * 单价
      */
     private BigDecimal standardPrice;
+
+    /**
+     * 商品类型1=外科，2=内科 3=器械
+     */
+    private Integer productType;
+
+    /**
+     * 状态
+     */
+    private Integer status;
+
+
 
 }

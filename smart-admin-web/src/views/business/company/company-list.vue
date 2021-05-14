@@ -4,10 +4,6 @@
             <!------ 查询条件第一行 begin------->
             <Row class="smart-query-form-row">
                 <span>
-                    id :
-                    <Input placeholder="请输入id" style="width: 180px" v-model="queryForm.id" />
-                </span>
-                <span>
                     公司名称 :
                     <Input placeholder="请输入公司名称" style="width: 180px" v-model="queryForm.name" />
                 </span>
@@ -25,45 +21,8 @@
                             v-privilege="'company-list-query'"
                     >重置</Button>
                 </ButtonGroup>
-
-                <Button
-                        @click="showMoreQueryConditionFlag = !showMoreQueryConditionFlag"
-                        icon="md-more"
-                        style="margin-left: 20px"
-                        type="primary"
-                        v-privilege="'company-list-query'"
-                >{{showMoreQueryConditionFlag?'隐藏':'展开'}}</Button>
             </Row>
             <!------ 查询条件第一行 begin------->
-
-            <!------ 查询条件第二行 begin------->
-            <Row class="smart-query-form-row" v-show="showMoreQueryConditionFlag">
-                <span>
-                  xxx：
-                  <Input placeholder="请输入xxx" style="width: 250px" />
-                </span>
-                <span>
-                    创建时间:
-                    <DatePicker
-                            placeholder="选择创建日期范围"
-                            split-panels
-                            style="width: 200px"
-                            type="daterange"
-                            v-model="queryForm.createTimeRange"
-                    ></DatePicker>
-                </span>
-                <span>
-                    更新时间:
-                    <DatePicker
-                            placeholder="选择更新日期范围"
-                            split-panels
-                            style="width: 200px"
-                            type="daterange"
-                            v-model="queryForm.updateTimeRange"
-                    ></DatePicker>
-                </span>
-            </Row>
-            <!------ 查询条件第二行 end------->
         </Card>
 
         <Card class="warp-card">
@@ -220,8 +179,6 @@
                     pageSize: PAGE_SIZE_INIT,
                     orders: []
                 },
-                //是否展示更多搜索条件
-                showMoreQueryConditionFlag: false,
                 /*  -------------------------表格相关数据------------------------- */
                 //表格分页
                 mainTablePage: {

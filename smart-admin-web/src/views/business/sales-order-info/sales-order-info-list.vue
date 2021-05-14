@@ -68,10 +68,6 @@
       <!------ 查询条件第二行 begin------->
       <Row class="smart-query-form-row" v-show="showMoreQueryConditionFlag">
         <span>
-          xxx：
-          <Input placeholder="请输入xxx" style="width: 250px" />
-        </span>
-        <span>
           创建时间:
           <DatePicker
             placeholder="选择创建日期范围"
@@ -158,6 +154,8 @@
         border
         highlight-row
         ref="mainTable"
+        height="600"
+        show-summary
       ></Table>
 
       <Page
@@ -335,15 +333,8 @@ export default {
         columnArray: [
           {
             type: "selection",
-            width: 30,
+            width: 40,
             align: "center",
-          },
-          {
-            title: "id",
-            key: "id",
-            tableColumn: "erp_sales_order_info.id",
-            sortable: "custom",
-            width: 100,
           },
           {
             title: "销售公司",

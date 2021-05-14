@@ -16,6 +16,7 @@ export const salesOrder = [
                 name: 'SalesOrderList',
                 meta: {
                     title: '销售单管理',
+                    icon: 'icon iconfont iconzujian',
                     privilege: [
                         { title: '查询', name: 'sales-order-list-query' },
                         { title: '新增', name: 'sales-order-list-add' },

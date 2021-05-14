@@ -7,6 +7,7 @@ import { keepAlive } from './keep-alive';
 import { notice } from './notice';
 import { threeRouter } from './three-router';
 import { company } from './company';
+import { product } from './product';
 import { hospital } from './hospital';
 import { salesOrder } from './sales-order';
 import {salesOrderInfo} from './sales-order-info'
@@ -30,7 +31,8 @@ export const business = [
       ...salesOrder,
       ...salesOrderInfo,
       ...hospital,
-      ...company
+      ...company,
+      ...product
     ]
   }
 ];
