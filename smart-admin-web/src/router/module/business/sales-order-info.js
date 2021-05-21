@@ -6,7 +6,7 @@ export const salesOrderInfo = [
         name: 'SalesOrderInfo',
         component: Main,
         meta: {
-            title: '销售单商品管理',
+            title: '销售单管理',
             icon: 'icon iconfont iconyoujianguanli'
         },
         children: [
@@ -15,8 +15,7 @@ export const salesOrderInfo = [
                 path: '/sales-order-info/sales-order-info-list',
                 name: 'SalesOrderInfoList',
                 meta: {
-                    title: '销售单商品管理',
-                    icon:"icon iconfont iconyoujianguanli",
+                    title: '销售单商品',
                     privilege: [
                         { title: '查询', name: 'sales-order-info-list-query' },
                         { title: '新增', name: 'sales-order-info-list-add' },
@@ -27,6 +26,14 @@ export const salesOrderInfo = [
                     ]
                 },
                 component: () => import('@/views/business/sales-order-info/sales-order-info-list.vue')
+             },
+             {
+                path: '/sales-order-info/order-statistics',
+                name: 'OrderStatistics',
+                meta: {
+                    title: '数据统计',
+                },
+                component: () => import('@/views/business/sales-order-info/order-statistics.vue')
              }
         ]
     }

@@ -1,6 +1,9 @@
 import { postAxios, getAxios, postDownloadAxios } from '@/lib/http';
 
 export const productApi = {
+    groupProduct: () => {
+        return getAxios('/product/group');
+    },
     // 添加 @author 任富帅
     addProduct: (data) => {
         return postAxios('/product/add', data);

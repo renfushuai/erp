@@ -2,9 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.rfs.smartadmin.module.business.erp.dao.SalesOrderInfoDao">
 
-    <resultMap id="SalesOrderInfoVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderInfoVO"></resultMap>
-    <resultMap id="SalesOrderInfoExcelVO" type="net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderInfoExcelVO"></resultMap>
+    <resultMap id="SalesOrderInfoVO"
+               type="net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderInfoVO"></resultMap>
+    <resultMap id="SalesOrderInfoExcelVO"
+               type="net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderInfoExcelVO"></resultMap>
 
+    <resultMap id="OrderStatisticsOutputDto"
+               type="net.rfs.smartadmin.module.business.erp.domain.dto.OrderStatisticsOutputDto"></resultMap>
 
     <select id="queryByPage" resultMap="SalesOrderInfoVO">
         select
@@ -60,15 +64,15 @@
 
     <select id="queryAllExportData" resultMap="SalesOrderInfoExcelVO">
         select
-           id,
-           order_code,
-           product_id,
-           product_name,
-           product_number,
-           specifications,
-           sales_quantity,
-           sales_price,
-           standard_price
+        id,
+        order_code,
+        product_id,
+        product_name,
+        product_number,
+        specifications,
+        sales_quantity,
+        sales_price,
+        standard_price
         from erp_sales_order_info
         <where>
             <if test="queryDTO.id != null">
@@ -102,15 +106,15 @@
 
     <select id="queryBatchExportData" resultMap="SalesOrderInfoExcelVO">
         select
-         id,
-         order_code,
-         product_id,
-         product_name,
-         product_number,
-         specifications,
-         sales_quantity,
-         sales_price,
-         standard_price
+        id,
+        order_code,
+        product_id,
+        product_name,
+        product_number,
+        specifications,
+        sales_quantity,
+        sales_price,
+        standard_price
         from erp_sales_order_info
         where id in
         <foreach collection="idList" open="(" close=")" separator="," item="item">
@@ -119,7 +123,9 @@
     </select>
 
     <delete id="deleteById">
-        delete from erp_sales_order_info where id = #{id}
+        delete
+        from erp_sales_order_info
+        where id = #{id}
     </delete>
 
     <delete id="deleteByIdList">
@@ -129,4 +135,19 @@
         </foreach>
     </delete>
 
+
+    <select id="orderStatistics" resultType="java.util.Map"
+            parameterType="net.rfs.smartadmin.module.business.erp.domain.dto.OrderStatisticsInputDto">
+        select a.area_code,a.name
+        <if test="productIdList!=null">
+            <foreach collection="productIdList" item="item">
+                ,(select count(1) from
+                erp_sales_order_info b
+                left join erp_sales_order c on c.code=b.order_code where b.product_id in (#{item}) and
+                c.hospital_id=a.id
+                ) as #{item}
+            </foreach>
+        </if>
+        from erp_hospital a order by a.area_code;
+    </select>
 </mapper>

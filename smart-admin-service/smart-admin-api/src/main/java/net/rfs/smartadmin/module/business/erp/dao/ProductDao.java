@@ -3,6 +3,7 @@ package net.rfs.smartadmin.module.business.erp.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import net.rfs.smartadmin.module.business.erp.domain.dto.GroupProductOutputDto;
 import net.rfs.smartadmin.module.business.erp.domain.dto.ProductQueryDTO;
 import net.rfs.smartadmin.module.business.erp.domain.entity.ProductEntity;
 import net.rfs.smartadmin.module.business.erp.domain.vo.ProductVO;
@@ -61,4 +62,10 @@ public interface ProductDao extends BaseMapper<ProductEntity> {
          * @return
          */
     List<ProductExcelVO> queryBatchExportData(@Param("idList")List<Long> idList);
+    /**
+    * @author: rfs
+    * @create: 2021/5/21
+    * @description: 聚合所有产品，id逗号分割
+    **/
+    List<GroupProductOutputDto> groupProduct();
 }

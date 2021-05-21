@@ -115,5 +115,8 @@
             #{item}
         </foreach>
     </delete>
-
+<select id="groupProduct" resultType="net.rfs.smartadmin.module.business.erp.domain.dto.GroupProductOutputDto">
+    select product_name, GROUP_CONCAT(id) AS id
+    from erp_product group by product_name;
+</select>
 </mapper>

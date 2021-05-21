@@ -140,20 +140,22 @@ public class SalesOrderService {
     public void uploadSalesOrder(List<ImportSalesOrderExcelDto> dataList, Integer orderType, Integer sourceId, String orderTypeName) {
         List<CompanyVO> companyList = companyService.getAll().getData();
         for (ImportSalesOrderExcelDto data : dataList) {
-            SalesOrderEntity salesOrder = getByOrderCode(data.getOrderCode());
-            SalesOrderInfoEntity salesOrderInfo = new SalesOrderInfoEntity();
             if (StringUtils.isBlank(data.getOrderCode())) {
                 continue;
             }
-            LambdaQueryWrapper lambda3 = Wrappers.<ProductEntity>lambdaQuery().eq(ProductEntity::getProductName, data.getProductName().trim());
+            // 判断销售单主表是否存在
+            SalesOrderEntity salesOrder = getByOrderCode(data.getOrderCode());
+            SalesOrderInfoEntity salesOrderInfo = new SalesOrderInfoEntity();
+            // 判断商品是否存在
+            LambdaQueryWrapper lambda3 = Wrappers.<ProductEntity>lambdaQuery().eq(ProductEntity::getProductName, data.getProductName().trim()).eq(ProductEntity::getSpecifications,data.getSpecifications().trim());
             ProductEntity productEntity = productDao.selectOne(lambda3);
             if (productEntity == null) {
                 productEntity = new ProductEntity();
-                productEntity.setProductName(data.getProductName());
+                productEntity.setProductName(data.getProductName().trim());
                 productEntity.setProductNumber(data.getProductNumber());
                 productEntity.setProductType(orderType);
                 productEntity.setStatus(1);
-                productEntity.setSpecifications(data.getSpecifications());
+                productEntity.setSpecifications(data.getSpecifications().trim());
                 productEntity.setStandardPrice(data.getStandardPrice());
                 productEntity.setStock(10000);
                 productEntity.setCreateTime(new Date());
@@ -163,7 +165,7 @@ public class SalesOrderService {
             }
             salesOrderInfo.setOrderCode(data.getOrderCode());
             salesOrderInfo.setProductId(productEntity.getId());
-            salesOrderInfo.setProductNumber(data.getProductNumber());
+            salesOrderInfo.setProductNumber(data.getProductNumber().trim());
             salesOrderInfo.setProductName(data.getProductName());
             salesOrderInfo.setSalesQuantity(data.getSalesQuantity());
             salesOrderInfo.setSpecifications(data.getSpecifications());
@@ -171,6 +173,7 @@ public class SalesOrderService {
             salesOrderInfo.setStandardPrice(data.getStandardPrice());
             HospitalEntity hospitalModel = hospitalDao.selectOne(Wrappers.<HospitalEntity>lambdaQuery().eq(HospitalEntity::getName, data.getHospitalName()));
             if (salesOrder == null) {
+                // 判断医院是否存在
                 if (StringUtils.isNotBlank(data.getHospitalName()) && hospitalModel == null) {
                     HospitalEntity hospitalEntity = new HospitalEntity();
                     hospitalEntity.setCreateTime(new Date());

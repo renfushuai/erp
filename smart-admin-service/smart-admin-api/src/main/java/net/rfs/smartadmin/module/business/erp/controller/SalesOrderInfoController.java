@@ -1,23 +1,26 @@
 package net.rfs.smartadmin.module.business.erp.controller;
 
-import net.rfs.smartadmin.common.domain.PageResultDTO;
-import net.rfs.smartadmin.common.controller.BaseController;
-import net.rfs.smartadmin.common.domain.ResponseDTO;
-import net.rfs.smartadmin.common.domain.ValidateList;
-import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderInfoAddDTO;
-import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderInfoUpdateDTO;
-import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderInfoQueryDTO;
-import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderInfoVO;
-import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderInfoExcelVO;
-import net.rfs.smartadmin.module.business.erp.service.SalesOrderInfoService;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
-import org.apache.poi.ss.usermodel.Workbook;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.rfs.smartadmin.common.controller.BaseController;
+import net.rfs.smartadmin.common.domain.PageResultDTO;
+import net.rfs.smartadmin.common.domain.ResponseDTO;
+import net.rfs.smartadmin.common.domain.ValidateList;
+import net.rfs.smartadmin.module.business.erp.domain.dto.OrderStatisticsInputDto;
+import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderInfoAddDTO;
+import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderInfoQueryDTO;
+import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderInfoUpdateDTO;
+import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderInfoExcelVO;
+import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderInfoVO;
+import net.rfs.smartadmin.module.business.erp.service.SalesOrderInfoService;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -39,25 +42,25 @@ public class SalesOrderInfoController extends BaseController {
     @Autowired
     private SalesOrderInfoService salesOrderInfoService;
 
-    @ApiOperation(value = "分页查询",notes = "@author 任富帅")
+    @ApiOperation(value = "分页查询", notes = "@author 任富帅")
     @PostMapping("/salesOrderInfo/page/query")
     public ResponseDTO<PageResultDTO<SalesOrderInfoVO>> queryByPage(@RequestBody SalesOrderInfoQueryDTO queryDTO) {
         return salesOrderInfoService.queryByPage(queryDTO);
     }
 
-    @ApiOperation(value = "添加",notes = "@author 任富帅")
+    @ApiOperation(value = "添加", notes = "@author 任富帅")
     @PostMapping("/salesOrderInfo/add")
-    public ResponseDTO<String> add(@RequestBody @Validated SalesOrderInfoAddDTO addTO){
+    public ResponseDTO<String> add(@RequestBody @Validated SalesOrderInfoAddDTO addTO) {
         return salesOrderInfoService.add(addTO);
     }
 
-    @ApiOperation(value="修改",notes = "@author 任富帅")
+    @ApiOperation(value = "修改", notes = "@author 任富帅")
     @PostMapping("/salesOrderInfo/update")
-    public ResponseDTO<String> update(@RequestBody @Validated SalesOrderInfoUpdateDTO updateDTO){
+    public ResponseDTO<String> update(@RequestBody @Validated SalesOrderInfoUpdateDTO updateDTO) {
         return salesOrderInfoService.update(updateDTO);
     }
 
-    @ApiOperation(value="批量删除",notes = "@author 任富帅")
+    @ApiOperation(value = "批量删除", notes = "@author 任富帅")
     @PostMapping("/salesOrderInfo/deleteByIds")
     public ResponseDTO<String> delete(@RequestBody @Validated ValidateList<Long> idList) {
         return salesOrderInfoService.deleteByIds(idList);
@@ -85,4 +88,9 @@ public class SalesOrderInfoController extends BaseController {
         downloadExcel("", workbook, response);
     }
 
+    @ApiOperation(value = "数据统计", notes = "@author 任富帅")
+    @PostMapping("/salesOrderInfo/orderStatistics")
+    public ResponseDTO<List<Object>> orderStatistics(@RequestBody OrderStatisticsInputDto dto) {
+        return ResponseDTO.succData(salesOrderInfoService.orderStatistics(dto));
+    }
 }

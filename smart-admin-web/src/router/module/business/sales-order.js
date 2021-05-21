@@ -6,7 +6,7 @@ export const salesOrder = [
         name: 'SalesOrder',
         component: Main,
         meta: {
-            title: '销售单管理',
+            title: '销售单',
             icon: 'icon iconfont iconyoujianguanli'
         },
         children: [
@@ -15,7 +15,7 @@ export const salesOrder = [
                 path: '/sales-order/sales-order-list',
                 name: 'SalesOrderList',
                 meta: {
-                    title: '销售单管理',
+                    title: '销售单',
                     icon: 'icon iconfont iconzujian',
                     privilege: [
                         { title: '查询', name: 'sales-order-list-query' },

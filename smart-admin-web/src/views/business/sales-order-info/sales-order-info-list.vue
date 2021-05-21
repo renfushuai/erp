@@ -154,7 +154,6 @@
         border
         highlight-row
         ref="mainTable"
-        height="600"
         show-summary
       ></Table>
 

@@ -3,6 +3,8 @@ package net.rfs.smartadmin.module.business.erp.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import net.rfs.smartadmin.module.business.erp.domain.dto.OrderStatisticsInputDto;
+import net.rfs.smartadmin.module.business.erp.domain.dto.OrderStatisticsOutputDto;
 import net.rfs.smartadmin.module.business.erp.domain.dto.SalesOrderInfoQueryDTO;
 import net.rfs.smartadmin.module.business.erp.domain.entity.SalesOrderInfoEntity;
 import net.rfs.smartadmin.module.business.erp.domain.vo.SalesOrderInfoVO;
@@ -61,4 +63,6 @@ public interface SalesOrderInfoDao extends BaseMapper<SalesOrderInfoEntity> {
          * @return
          */
     List<SalesOrderInfoExcelVO> queryBatchExportData(@Param("idList")List<Long> idList);
+
+    List<Object> orderStatistics(OrderStatisticsInputDto dto);
 }

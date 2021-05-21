@@ -5,14 +5,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.rfs.smartadmin.common.domain.PageResultDTO;
 import net.rfs.smartadmin.common.domain.ResponseDTO;
 import net.rfs.smartadmin.module.business.erp.dao.ProductDao;
+import net.rfs.smartadmin.module.business.erp.domain.dto.GroupProductOutputDto;
 import net.rfs.smartadmin.module.business.erp.domain.dto.ProductAddDTO;
-import net.rfs.smartadmin.module.business.erp.domain.dto.ProductUpdateDTO;
 import net.rfs.smartadmin.module.business.erp.domain.dto.ProductQueryDTO;
+import net.rfs.smartadmin.module.business.erp.domain.dto.ProductUpdateDTO;
 import net.rfs.smartadmin.module.business.erp.domain.entity.ProductEntity;
-import net.rfs.smartadmin.module.business.erp.domain.vo.ProductVO;
 import net.rfs.smartadmin.module.business.erp.domain.vo.ProductExcelVO;
-import net.rfs.smartadmin.util.SmartPageUtil;
+import net.rfs.smartadmin.module.business.erp.domain.vo.ProductVO;
 import net.rfs.smartadmin.util.SmartBeanUtil;
+import net.rfs.smartadmin.util.SmartPageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,12 +39,13 @@ public class ProductService {
     /**
      * 根据id查询
      */
-    public ProductEntity getById(Long id){
-        return  productDao.selectById(id);
+    public ProductEntity getById(Long id) {
+        return productDao.selectById(id);
     }
 
     /**
      * 分页查询
+     *
      * @author 任富帅
      * @date 2021-05-14 15:53:42
      */
@@ -56,6 +58,7 @@ public class ProductService {
 
     /**
      * 添加
+     *
      * @author 任富帅
      * @date 2021-05-14 15:53:42
      */
@@ -67,6 +70,7 @@ public class ProductService {
 
     /**
      * 编辑
+     *
      * @author 任富帅
      * @date 2021-05-14 15:53:42
      */
@@ -79,6 +83,7 @@ public class ProductService {
 
     /**
      * 删除
+     *
      * @author 任富帅
      * @date 2021-05-14 15:53:42
      */
@@ -90,19 +95,25 @@ public class ProductService {
 
     /**
      * 查询全部导出对象
+     *
      * @author 任富帅
      * @date 2021-05-14 15:53:42
      */
     public List<ProductExcelVO> queryAllExportData(ProductQueryDTO queryDTO) {
-        return productDao.queryAllExportData( queryDTO);
+        return productDao.queryAllExportData(queryDTO);
     }
 
     /**
      * 批量查询导出对象
+     *
      * @author 任富帅
      * @date 2021-05-14 15:53:42
      */
     public List<ProductExcelVO> queryBatchExportData(List<Long> idList) {
         return productDao.queryBatchExportData(idList);
+    }
+
+    public ResponseDTO<List<GroupProductOutputDto>> groupProduct() {
+        return ResponseDTO.succData(productDao.groupProduct());
     }
 }
