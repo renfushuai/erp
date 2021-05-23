@@ -16,12 +16,12 @@ public class ImportSalesOrderExcelDto {
     @Excel(name = "结算单")
     private String orderCode;
     @Excel(name = "名称")
-    private String productName;
+    private String productName="";
     /** 规格 */
     @Excel(name = "规格")
-    private String specifications;
+    private String specifications="";
     @Excel(name = "货号")
-    private String productNumber;
+    private String productNumber="";
     /** 数量 */
     @Excel(name = "数量")
     private Integer salesQuantity;

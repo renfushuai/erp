@@ -141,7 +141,7 @@
         select a.area_code,a.name
         <if test="productIdList!=null">
             <foreach collection="productIdList" item="item">
-                ,(select count(1) from
+                ,(select ifnull(sum(sales_quantity),0) from
                 erp_sales_order_info b
                 left join erp_sales_order c on c.code=b.order_code where b.product_id in (#{item}) and
                 c.hospital_id=a.id

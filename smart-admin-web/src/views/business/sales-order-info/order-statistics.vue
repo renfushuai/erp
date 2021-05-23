@@ -39,12 +39,14 @@
         </ButtonGroup>
       </Row>
     </Card>
-     
+
     <Checkbox-group
       v-model="tableColumnsChecked"
       @on-change="changeTableColumns"
     >
-     <Checkbox v-for="item in productData" :label="item.id">{{item.productName}}</Checkbox>
+      <Checkbox v-for="item in productData" :label="item.id" :key="item.id">{{
+        item.productName
+      }}</Checkbox>
     </Checkbox-group>
     <Table :data="tableData2" :columns="tableColumns2" border> </Table>
   </div>
@@ -65,66 +67,73 @@ export default {
         //商品名称
         productName: null,
         //销售单号
-        orderCode: null,
+        productIdList: [],
         createTimeRange: ["", ""],
       },
-      productData:[],
+      productData: [],
       tableData2: [],
-      tableColumns2: [],
-      tableColumnsChecked: ["68", "71", "57"],
+      tableColumns2: [
+        {
+          title: "地区",
+          key: "area_code",
+          fixed: "left",
+          width: 80,
+        },
+        {
+          title: "医院",
+          key: "name",
+          width: 400,
+        },
+      ],
+      tableColumnsChecked: [],
     };
   },
   methods: {
     getTable2Columns() {
-      const table2ColumnList = {
-        areCode: {
-          title: "地区",
-          key: "area_code",
-          width: 80,
-        },
-        name: {
-          title: "医院",
-          key: "name",
-          fixed: "left",
-          width: 400,
-        },
-        68: {
-          title: "Weak",
-          key: "weak",
-          width: 150,
-          sortable: true,
-        },
-        71: {
-          title: "Weak",
-          key: "weak",
-          width: 150,
-          sortable: true,
-        },
-        57: {
-          title: "Signin",
-          key: "signin",
-          width: 150,
-          sortable: true,
-        },
-      };
-      let data = [table2ColumnList.areCode,table2ColumnList.name];
-      this.tableColumnsChecked.forEach((col) =>
-        data.push(table2ColumnList[col])
-      );
+      const table2ColumnList = {};
+      let data = [table2ColumnList.areCode, table2ColumnList.name];
+      this.tableColumnsChecked.forEach((col) => {
+        console.log(col);
+        data.push(table2ColumnList[col]);
+      });
 
       return data;
     },
     changeTableColumns() {
-      this.tableColumns2 = this.getTable2Columns();
+      //this.tableColumns2 = this.getTable2Columns();
+      var self = this;
+      self.tableColumns2=[{
+          title: "地区",
+          key: "area_code",
+          fixed: "left",
+          width: 80,
+        },
+        {
+          title: "医院",
+          key: "name",
+          width: 400,
+        }]
+      this.tableColumnsChecked.forEach((col) => {
+        self.queryForm.productIdList.push(col);
+        let product = this.productData.find((m) => m.id == col);
+        self.tableColumns2.push({
+          title: product.productName,
+          key: product.id,
+        });
+       
+      });
+       self.queryList();
     },
-     async queryProductList() {
+    // 查询产品
+    async queryProductList() {
       let result = await productApi.groupProduct();
       this.productData = result.data;
-      console.log(this.productData)
+      console.log(this.productData);
     },
     //查询
     async queryList() {
       let params = this.convertQueryParam();
+      console.log(params)
       let result = await salesOrderInfoApi.orderStatistics(params);
       this.tableData2 = result.data;
       console.log(result.data);
