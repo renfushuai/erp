@@ -136,31 +136,19 @@ public class SalesOrderService {
     public List<SalesOrderExcelVO> queryBatchExportData(List<Long> idList) {
         return salesOrderDao.queryBatchExportData(idList);
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> fffa7329360f7bc20d6c430c7342fb540838d075
     @Transactional(rollbackFor = Exception.class)
     public void uploadSalesOrder(List<ImportSalesOrderExcelDto> dataList, Integer orderType, Integer sourceId, String orderTypeName) {
         List<CompanyVO> companyList = companyService.getAll().getData();
         for (ImportSalesOrderExcelDto data : dataList) {
-<<<<<<< HEAD
-            if (StringUtils.isBlank(data.getOrderCode()) || StringUtils.isBlank(data.getHospitalName())) {
-=======
             if (StringUtils.isBlank(data.getOrderCode())&&StringUtils.isBlank(data.getProductName())) {
->>>>>>> fffa7329360f7bc20d6c430c7342fb540838d075
                 continue;
             }
             // 判断销售单主表是否存在
             SalesOrderEntity salesOrder = getByOrderCode(data.getOrderCode());
             SalesOrderInfoEntity salesOrderInfo = new SalesOrderInfoEntity();
             // 判断商品是否存在
-<<<<<<< HEAD
-            LambdaQueryWrapper lambda3 = Wrappers.<ProductEntity>lambdaQuery().eq(ProductEntity::getProductName, data.getProductName().trim()).eq(ProductEntity::getSpecifications, data.getSpecifications().trim());
-=======
             LambdaQueryWrapper lambda3 = Wrappers.<ProductEntity>lambdaQuery()
                     .eq(ProductEntity::getProductName, data.getProductName().trim());
->>>>>>> fffa7329360f7bc20d6c430c7342fb540838d075
             ProductEntity productEntity = productDao.selectOne(lambda3);
             if (productEntity == null) {
                 productEntity = new ProductEntity();
@@ -220,6 +208,8 @@ public class SalesOrderService {
                 salesOrder.setOrderSourceName(companyList.stream().filter(m -> m.getId().equals(Long.valueOf(sourceId))).findFirst().get().getName());
                 salesOrder.setOrderSourceId(sourceId);
                 salesOrderDao.insert(salesOrder);
+
+
             }
             salesOrderInfoDao.insert(salesOrderInfo);
         }
