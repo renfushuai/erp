@@ -23,12 +23,12 @@ export const business = [
       icon: 'icon iconfont iconyoujianguanli'
     },
     children: [
-      ...peony,
-      ...emailSetting,
-      ...keepAlive,
-      ...notice,
-      ...threeRouter,
-      ...salesOrder,
+      // ...peony,
+      // ...emailSetting,
+      // ...keepAlive,
+      // ...notice,
+      // ...threeRouter,
+      //...salesOrder,
       ...salesOrderInfo,
       ...hospital,
       ...company,
